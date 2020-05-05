@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using WarGameAPI.Entities.Views;
 
 namespace WarGameAPI.Entities
 {
@@ -11,6 +12,7 @@ namespace WarGameAPI.Entities
         {
         }
 
+        //Tables
         public virtual DbSet<Card> Card { get; set; }
         public virtual DbSet<DeckCards> DeckCards { get; set; }
         public virtual DbSet<Deck> Deck { get; set; }
@@ -26,6 +28,10 @@ namespace WarGameAPI.Entities
         public virtual DbSet<ShipState> ShipState { get; set; }
         public virtual DbSet<Shot> Shot { get; set; }
         public virtual DbSet<User> User { get; set; }
+
+        //Views
+        public virtual DbSet<UserStatsView> UserStatsView { get; set; }
+        public virtual DbSet<GamesView> GamesView { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -441,6 +447,64 @@ namespace WarGameAPI.Entities
                     .IsUnicode(false);
 
                 entity.Property(e => e.Points).HasColumnName("US_POINTS");
+            });
+
+            modelBuilder.Entity<UserStatsView>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+
+                entity.ToTable("USER_STATS");
+
+                entity.Property(e => e.Id).HasColumnName("US_ID");
+
+                entity.Property(e => e.Nickname).HasColumnName("US_NICKNAME");
+
+                entity.Property(e => e.Victories).HasColumnName("VICTORIES");
+
+                entity.Property(e => e.Defeats).HasColumnName("DEFEATS");
+            });
+
+            modelBuilder.Entity<GamesView>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+
+                entity.ToTable("GAMES");
+
+                entity.Property(e => e.Id).HasColumnName("GA_ID");
+
+                entity.Property(e => e.StateId).HasColumnName("GS_ID");
+
+                entity.Property(e => e.StateName).HasColumnName("GS_NAME");
+
+                entity.Property(e => e.Player1Id).HasColumnName("US_ID_PLAYER1");
+
+                entity.Property(e => e.Player1Nickname).HasColumnName("US_NICKNAME1");
+
+                entity.Property(e => e.Player2Id).HasColumnName("US_ID_PLAYER2");
+
+                entity.Property(e => e.Player2Nickname).HasColumnName("US_NICKNAME2");
+
+                entity.Property(e => e.PosPlayer1Ok).HasColumnName("GA_POS_PLAYER1_OK");
+
+                entity.Property(e => e.PosPlayer2Ok).HasColumnName("GA_POS_PLAYER2_OK");
+
+                entity.Property(e => e.PlayerTurnId).HasColumnName("US_ID_PLAYER_TURN");
+
+                entity.Property(e => e.PlayerTurnNickname).HasColumnName("US_NICKNAME3");
+
+                entity.Property(e => e.WinnerId).HasColumnName("GA_WINNER");
+
+                entity.Property(e => e.WinnerNickname).HasColumnName("US_NICKNAME4");
+
+                entity.Property(e => e.nbTurn).HasColumnName("GA_NB_TURN");
+
+                entity.Property(e => e.ingameDeckId).HasColumnName("IND_ID");
+
+                entity.Property(e => e.startDate).HasColumnName("GA_STARTDATE");
+
+                entity.Property(e => e.endDate).HasColumnName("GA_ENDDATE");
+
+
             });
 
             OnModelCreatingPartial(modelBuilder);

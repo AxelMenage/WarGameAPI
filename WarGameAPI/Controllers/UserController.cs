@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WarGameAPI.Entities;
+using WarGameAPI.Entities.Views;
 using WarGameAPI.Models;
 using WarGameAPI.Services;
 
@@ -60,6 +61,19 @@ namespace WarGameAPI.Controllers
             {
                 return BadRequest(new { message = e.Message });
             }
+        }
+
+        [Authorize]
+        [HttpGet("stats/{id}")]
+        public ActionResult<string> GetStats(int id)
+        {
+            UserStatsView userStats = _userService.GetStatsByUser(id);
+            if (userStats == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(userStats);
         }
     }
 }

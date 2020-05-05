@@ -22,6 +22,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Http;
 using Swashbuckle.AspNetCore.SwaggerUI;
+using System.IO;
+using System.Reflection;
 
 namespace WarGameAPI
 {
@@ -43,8 +45,7 @@ namespace WarGameAPI
             services.AddMvc();
 
             // Configure jwt authentication.
-            var appSettingsSecret = Configuration.GetValue<string>("AppSettings:Secret");
-            var key = Encoding.ASCII.GetBytes(appSettingsSecret);
+            var key = Encoding.ASCII.GetBytes(Configuration["Jwt:Key"]);
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -76,43 +77,44 @@ namespace WarGameAPI
             // Swagger.
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Wim API", Version = "v1" });
-
-                var security = new Dictionary<string, IEnumerable<string>>
-                {
-                    {"Bearer", new string[] { }},
-                };
-
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "WarGame API", Version = "v1" });
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
-                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                    Description = @"JWT Authorization header using the Bearer scheme. \r\n\r\n 
+                      Enter 'Bearer' [space] and then your token in the text input below.
+                      \r\n\r\nExample: 'Bearer 12345abcdef'",
                     Name = "Authorization",
                     In = ParameterLocation.Header,
                     Type = SecuritySchemeType.ApiKey,
                     Scheme = "Bearer"
                 });
 
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference
-                            {
-                                Type = ReferenceType.SecurityScheme,
-                                Id = "Bearer"
-                            },
-                            Scheme = "oauth2",
-                            Name = "Bearer",
-                            In = ParameterLocation.Header,
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement()
+      {
+        {
+          new OpenApiSecurityScheme
+          {
+            Reference = new OpenApiReference
+              {
+                Type = ReferenceType.SecurityScheme,
+                Id = "Bearer"
+              },
+              Scheme = "oauth2",
+              Name = "Bearer",
+              In = ParameterLocation.Header,
 
-                        },
-                        new List<string>()
-                    }
-                });
+            },
+            new List<string>()
+          }
+        });
+                /*var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);*/
             });
 
             // Configure DI for application services.
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IGameService, GameService>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }

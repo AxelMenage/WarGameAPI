@@ -9,6 +9,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using WarGameAPI.Entities;
+using WarGameAPI.Entities.Views;
 using WarGameAPI.Helpers;
 using WarGameAPI.Models;
 
@@ -19,6 +20,7 @@ namespace WarGameAPI.Services
         Task<ShortUser> Authenticate(string username, string password);
         bool VerifyToken(string token);
         Task<User> Create(ShortUser user);
+        UserStatsView GetStatsByUser(int id);
     }
 
     public class UserService : IUserService
@@ -48,25 +50,30 @@ namespace WarGameAPI.Services
 
             };
 
-            // authentication successful so generate jwt token
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var appSettingsSecret = _configuration.GetValue<string>("AppSettings:Secret");
-            var key = Encoding.ASCII.GetBytes(appSettingsSecret);
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new Claim[]
-                {
-                        new Claim(ClaimTypes.Name, user.Id.ToString())
-                }),
-
-                Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            returnedUser.Token = tokenHandler.WriteToken(token);
+            returnedUser.Token = GenerateJSONWebToken(user);
 
             // authentication successful so return user details without password
             return returnedUser.WithoutPassword();
+        }
+
+        private string GenerateJSONWebToken(User user)
+        {
+            var securityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[]
+                    {
+                        new Claim(ClaimTypes.Name, user.Id.ToString())
+                    }),
+
+                Expires = DateTime.UtcNow.AddDays(7),
+                SigningCredentials = credentials
+            };
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
         /// <summary>
@@ -105,6 +112,11 @@ namespace WarGameAPI.Services
             {
                 throw new Exception(e.Message);
             }
+        }
+
+        public UserStatsView GetStatsByUser(int id)
+        {
+            return  _wargameContext.UserStatsView.SingleOrDefault(x => x.Id == id);
         }
 
         /// <summary>
