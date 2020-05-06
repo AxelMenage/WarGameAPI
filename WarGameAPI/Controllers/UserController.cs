@@ -63,7 +63,6 @@ namespace WarGameAPI.Controllers
             }
         }
 
-        [Authorize]
         [HttpGet("stats/{id}")]
         public ActionResult<string> GetStats(int id)
         {
@@ -74,6 +73,24 @@ namespace WarGameAPI.Controllers
             }
 
             return Ok(userStats);
+        }
+
+        [HttpPost("search")]
+        [ProducesResponseType(201, Type = typeof(ShortUser))]
+        [ProducesResponseType(400)]
+        public IActionResult search(string nickname)
+        {
+            try
+            {
+                User user = _userService.GetByNickname(nickname);
+                if(user != null)
+                    return Ok(new ShortUser() { Id = user.Id, Nickname = user.Nickname });
+                return NotFound();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { message = e.Message });
+            }
         }
     }
 }

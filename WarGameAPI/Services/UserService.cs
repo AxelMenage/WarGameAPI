@@ -21,6 +21,7 @@ namespace WarGameAPI.Services
         bool VerifyToken(string token);
         Task<User> Create(ShortUser user);
         UserStatsView GetStatsByUser(int id);
+        User GetByNickname(string nickname);
     }
 
     public class UserService : IUserService
@@ -139,6 +140,11 @@ namespace WarGameAPI.Services
                 // Le token est probablement faux.
                 return false;
             }
+        }
+
+        public User GetByNickname(string nickname)
+        {
+            return _wargameContext.User.FirstOrDefault(x => x.Nickname.ToLower() == nickname.ToLower());
         }
     }
 }

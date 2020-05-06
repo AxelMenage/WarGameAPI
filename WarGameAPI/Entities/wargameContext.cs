@@ -32,6 +32,7 @@ namespace WarGameAPI.Entities
         //Views
         public virtual DbSet<UserStatsView> UserStatsView { get; set; }
         public virtual DbSet<GamesView> GamesView { get; set; }
+        public virtual DbSet<FriendsView> FriendsView { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -118,9 +119,12 @@ namespace WarGameAPI.Entities
 
             modelBuilder.Entity<Friends>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => e.Id)
+                    .HasName("PK__GAME_GA__97A04DAAAEA28F48");
 
                 entity.ToTable("FRIENDS_FR");
+
+                entity.Property(e => e.Id).HasColumnName("FR_ID");
 
                 entity.HasIndex(e => new { e.UserId1, e.UserId2 })
                     .HasName("AK_US_ID")
@@ -129,6 +133,8 @@ namespace WarGameAPI.Entities
                 entity.Property(e => e.UserId1).HasColumnName("US_ID1");
 
                 entity.Property(e => e.UserId2).HasColumnName("US_ID2");
+
+                entity.Property(e => e.Indemand).HasColumnName("FR_INDEMAND");
 
                 entity.HasOne(d => d.User1)
                     .WithMany()
@@ -504,7 +510,29 @@ namespace WarGameAPI.Entities
 
                 entity.Property(e => e.endDate).HasColumnName("GA_ENDDATE");
 
+            });
 
+            modelBuilder.Entity<FriendsView>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+
+                entity.ToTable("FRIENDS");
+
+                entity.Property(e => e.Id).HasColumnName("FR_ID");
+
+                entity.Property(e => e.Id1).HasColumnName("US_ID1");
+
+                entity.Property(e => e.Nickname1).HasColumnName("NICKNAME1");
+
+                entity.Property(e => e.Points1).HasColumnName("POINTS1");
+
+                entity.Property(e => e.Id2).HasColumnName("US_ID2");
+
+                entity.Property(e => e.Nickname2).HasColumnName("NICKNAME2");
+
+                entity.Property(e => e.Points2).HasColumnName("POINTS2");
+
+                entity.Property(e => e.Indemand).HasColumnName("FR_INDEMAND");
             });
 
             OnModelCreatingPartial(modelBuilder);

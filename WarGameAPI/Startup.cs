@@ -115,6 +115,7 @@ namespace WarGameAPI
             // Configure DI for application services.
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IGameService, GameService>();
+            services.AddScoped<IFriendService, FriendService>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }

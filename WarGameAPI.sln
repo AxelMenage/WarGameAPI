@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WarGameAPI", "WarGameAPI\WarGameAPI.csproj", "{CFCF2BB9-5590-4981-80B7-176CD53B6E9D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WarGameAPI", "WarGameAPI\WarGameAPI.csproj", "{CFCF2BB9-5590-4981-80B7-176CD53B6E9D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WarGameAPITesting", "WarGameAPITesting\WarGameAPITesting.csproj", "{4C5CCD41-97B5-4E1E-95A3-8F82DD75BB2F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{CFCF2BB9-5590-4981-80B7-176CD53B6E9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CFCF2BB9-5590-4981-80B7-176CD53B6E9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CFCF2BB9-5590-4981-80B7-176CD53B6E9D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C5CCD41-97B5-4E1E-95A3-8F82DD75BB2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C5CCD41-97B5-4E1E-95A3-8F82DD75BB2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C5CCD41-97B5-4E1E-95A3-8F82DD75BB2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C5CCD41-97B5-4E1E-95A3-8F82DD75BB2F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
