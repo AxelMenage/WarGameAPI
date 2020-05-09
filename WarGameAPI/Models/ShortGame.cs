@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WarGameAPI.Entities.Views
+namespace WarGameAPI.Models
 {
-    public partial class GamesView
+    public partial class ShortGame
     {
         public int Id { get; set; }
         public byte StateId { get; set; }
@@ -22,7 +22,9 @@ namespace WarGameAPI.Entities.Views
         public string WinnerNickname { get; set; }
         public int NbTurn { get; set; }
         public int? IngameDeckId { get; set; }
+        public byte GameTypeId { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime? EndDate { get; set; }
+        public int? DeckId { get; set; }
     }
 }

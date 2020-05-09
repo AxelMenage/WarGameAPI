@@ -502,13 +502,13 @@ namespace WarGameAPI.Entities
 
                 entity.Property(e => e.WinnerNickname).HasColumnName("US_NICKNAME4");
 
-                entity.Property(e => e.nbTurn).HasColumnName("GA_NB_TURN");
+                entity.Property(e => e.NbTurn).HasColumnName("GA_NB_TURN");
 
-                entity.Property(e => e.ingameDeckId).HasColumnName("IND_ID");
+                entity.Property(e => e.IngameDeckId).HasColumnName("IND_ID");
 
-                entity.Property(e => e.startDate).HasColumnName("GA_STARTDATE");
+                entity.Property(e => e.StartDate).HasColumnName("GA_STARTDATE");
 
-                entity.Property(e => e.endDate).HasColumnName("GA_ENDDATE");
+                entity.Property(e => e.EndDate).HasColumnName("GA_ENDDATE");
 
             });
 
