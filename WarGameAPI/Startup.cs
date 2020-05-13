@@ -117,6 +117,7 @@ namespace WarGameAPI
             services.AddScoped<IGameService, GameService>();
             services.AddScoped<IFriendService, FriendService>();
             services.AddScoped<IShipService, ShipService>();
+            services.AddScoped<IPositionService, PositionService>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }

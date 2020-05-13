@@ -21,6 +21,7 @@ namespace WarGameAPI.Services
         Task<bool> Delete(Game game);
         bool GameContainsUser(Game game, int userId);
         bool GameIsActive(Game game);
+        Task<GamesView> updatePosition(Position position);
     }
 
     public class GameService : IGameService
@@ -84,7 +85,7 @@ namespace WarGameAPI.Services
             }
             catch (Exception e)
             {
-                throw new Exception("Erreur lors de la création de la demande : " + e.Message);
+                throw new Exception("Error in friend's request : " + e.Message);
             }
         }
 
@@ -100,7 +101,7 @@ namespace WarGameAPI.Services
             }
             catch (Exception e)
             {
-                throw new Exception("Erreur lors de l'acceptation de la demande : " + e.Message);
+                throw new Exception("Error in friend's acceptation request : " + e.Message);
             }
         }
 
@@ -142,6 +143,18 @@ namespace WarGameAPI.Services
         public bool GameIsActive(Game game)
         {
             return game.GameStateId == (byte)GameStateEnum.WaitingPlacements || game.GameStateId == (byte)GameStateEnum.InProgress;
+        }
+
+        public async Task<GamesView> updatePosition(Position position)
+        {
+            Game game = FindById(position.GameId);
+            if (game.Player1Id == position.UserId) game.PosPlayer1Ok = true;
+            else game.PosPlayer2Ok = true;
+            if (game.PosPlayer1Ok && game.PosPlayer2Ok) game.GameStateId = (byte)GameStateEnum.InProgress;
+            _wargameContext.Update(game);
+            await _wargameContext.SaveChangesAsync();
+            return _wargameContext.GamesView.SingleOrDefault(x => x.Id == game.Id);
+
         }
     }
 }
