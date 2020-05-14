@@ -24,6 +24,8 @@ using Microsoft.AspNetCore.Http;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using System.IO;
 using System.Reflection;
+using Microsoft.AspNetCore.SpaServices.AngularCli;
+using WarGameAPI.Hubs;
 
 namespace WarGameAPI
 {
@@ -43,6 +45,8 @@ namespace WarGameAPI
             services.AddDbContext<wargameContext>(options => options.UseSqlServer(Configuration.GetConnectionString("warGameDatabase")));
 
             services.AddMvc();
+
+            services.AddSignalR();
 
             // Configure jwt authentication.
             var key = Encoding.ASCII.GetBytes(Configuration["Jwt:Key"]);
@@ -118,6 +122,7 @@ namespace WarGameAPI
             services.AddScoped<IFriendService, FriendService>();
             services.AddScoped<IShipService, ShipService>();
             services.AddScoped<IPositionService, PositionService>();
+            services.AddScoped<IMessageService, MessageService>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
@@ -135,10 +140,7 @@ namespace WarGameAPI
             app.UseRouting();
 
             // global cors policy
-            app.UseCors(x => x
-                .WithOrigins(new string[] { "http://localhost:4200" })
-                .AllowAnyMethod()
-                .AllowAnyHeader());
+            app.UseCors("CorsPolicy");
 
             app.UseAuthentication();
             app.UseAuthorization();
@@ -146,6 +148,7 @@ namespace WarGameAPI
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<MessageHub>("api/MessageHub");
             });
 
             app.UseSwagger();

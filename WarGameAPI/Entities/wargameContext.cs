@@ -289,6 +289,11 @@ namespace WarGameAPI.Entities
 
                 entity.Property(e => e.UserIdSender).HasColumnName("US_ID_SENDER");
 
+                entity.Property(e => e.Date)
+                    .HasColumnName("ME_DATE")
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
                 entity.HasOne(d => d.Game)
                     .WithMany(p => p.Messages)
                     .HasForeignKey(d => d.GameId)

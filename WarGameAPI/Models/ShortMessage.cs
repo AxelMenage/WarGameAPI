@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace WarGameAPI.Entities
+namespace WarGameAPI.Models
 {
-    public partial class Message
+    public partial class ShortMessage
     {
         public int Id { get; set; }
         public int GameId { get; set; }
         public string Content { get; set; }
         public int UserIdSender { get; set; }
         public DateTime Date { get; set; }
-
-        public virtual Game Game { get; set; }
-        public virtual User UserSender { get; set; }
     }
 }
